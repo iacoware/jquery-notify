@@ -1,0 +1,1 @@
+Flexible jQuery notification plugin
