@@ -1,7 +1,9 @@
+General:
 - give the demos a nice layout
 - publish the demo on my site
+- add documentation
 
-script:
+Script:
 - Add different type of messages (info, warning, error). It would just attach a different css class
 - Test it on different browsers
 - Investigate the css fixed support across browser
