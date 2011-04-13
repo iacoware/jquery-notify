@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>jQuery Notify Demo</title>
+
+    <link href="jquery.notify.css" rel="stylesheet">
+    <style type="text/css">
+    </style>
+
+    <script src="lib/jquery-1.5.2.js" type="text/javascript"></script>
+    <script src="jquery.notify.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var index = 0;
+
+        function getContent(text) {
+            return text + " " + index++;
+        }
+    </script>
+</head>
+<body>
+    <div id="notification-bar">
+    </div>
+
+    <div style="width: 960px; margin: 0 auto;">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vitae est vitae lacus congue convallis. Praesent iaculis blandit sapien id aliquam. Sed euismod justo ac orci commodo at posuere lorem laoreet. Sed sit amet volutpat turpis. Fusce lectus orci, suscipit sit amet ornare sed, tempus nec lectus. Nam ornare iaculis magna, porttitor facilisis dolor ultrices sit amet. Donec neque tellus, faucibus vitae tincidunt quis, tempor at orci. Pellentesque quam est, varius sit amet ullamcorper id, interdum in nisl. Morbi congue viverra tristique. Maecenas at dolor ut velit mollis mollis quis eget dolor. Sed lobortis semper orci, eu elementum metus congue nec. Integer cursus, tellus fringilla semper dapibus, augue turpis mollis mi, et auctor elit dui vitae lectus. Nunc vel nunc sed tellus gravida varius eget nec neque. Donec pulvinar purus quis ligula feugiat placerat. Aliquam aliquam, quam vitae porta egestas, ante sem aliquet nibh, accumsan posuere nulla est et sem. Ut cursus massa eu lacus ultricies ut faucibus ante facilisis. Mauris luctus pellentesque enim, non malesuada orci ornare in. Donec dapibus ornare ligula cursus hendrerit. Mauris lorem tortor, mattis at tincidunt sed, scelerisque ac nulla. Maecenas nec est commodo nunc bibendum elementum et eu arcu.</p>
+
+        <p>Fusce sed nunc mollis leo condimentum ultrices. Ut vel sodales elit. Aliquam feugiat accumsan justo, sed hendrerit mi mollis eu. Mauris risus orci, posuere at vehicula a, vulputate a libero. Nullam vehicula velit in diam aliquam molestie. Proin ac erat tellus, at condimentum est. Integer lacinia risus in tortor sollicitudin rhoncus. Nulla a felis tellus, in faucibus mi. Fusce eget libero turpis. Aenean posuere, velit dictum consequat cursus, diam urna suscipit massa, et aliquet ligula lectus et lectus. Ut viverra elementum rutrum. Etiam vehicula posuere nisi, vel sollicitudin ligula pulvinar gravida.</p>
+    </div>
+
+    <div>
+        <button onclick="$.notify({position: 'tl'}, getContent('Element removed'))">tl</button>
+        <button onclick="$.notify({position: 'tc'}, getContent('Element removed'))">tc</button>
+        <button onclick="$.notify({position: 'tr'}, getContent('Element removed'))">tr</button>
+        <button onclick="$.notify({position: 'tl', type: 'sticky'}, getContent('Element removed'))">tl - sticky</button>
+        <button onclick="$.notify({position: 'tc', type: 'sticky'}, getContent('Element removed'))">tc - sticky</button>
+        <button onclick="$.notify({position: 'tr', type: 'sticky'}, getContent('Element removed'))">tr - sticky</button>
+        <button onclick="$.notify({position: 'tr', type: 'human'}, getContent('Element removed'))">tr - human</button>
+    </div>
+
+    <div>
+        <button onclick="$.notify({position: 'ml'}, getContent('Element removed'))">ml</button>
+        <button onclick="$.notify({position: 'mc'}, getContent('Element removed'))">mc</button>
+        <button onclick="$.notify({position: 'mr'}, getContent('Element removed'))">mr</button>
+        <button onclick="$.notify({position: 'ml', type: 'sticky'}, getContent('Element removed'))">ml - sticky</button>
+        <button onclick="$.notify({position: 'mc', type: 'sticky'}, getContent('This is something extremely important you have to know. That\'s why I\'m putting right in front of you!!!'))">mc - sticky</button>
+        <button onclick="$.notify({position: 'mr', type: 'sticky'}, getContent('Element removed'))">mr - sticky</button>
+    </div>
+
+    <div>
+        <button onclick="$.notify({position: 'bl'}, getContent('Element added'))">bl</button>
+        <button onclick="$.notify({position: 'bc'}, getContent('Element added'))">bc</button>
+        <button onclick="$.notify({position: 'br'}, getContent('Element added'))">br</button>
+        <button onclick="$.notify({position: 'bl', type: 'sticky'}, getContent('Element added'))">bl - sticky</button>
+        <button onclick="$.notify({position: 'bc', type: 'sticky'}, getContent('Element added'))">bc - sticky</button>
+        <button onclick="$.notify({position: 'br', type: 'sticky'}, getContent('Element added'))">br - sticky</button>
+    </div>
+
+    <div>
+        <button onclick="$.notify({position: '#notification-bar'}, getContent('You should update your browser'))">notification bar</button>
+        <button onclick="$.notify({position: '#status-bar'}, getContent('Browser updated ;-)'))">status bar</button>
+    </div>
+
+    <div style="width: 960px; margin: 0 auto;">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vitae est vitae lacus congue convallis.
+            Praesent iaculis blandit sapien id aliquam. Sed euismod justo ac orci commodo at posuere lorem laoreet.
+            Sed sit amet volutpat turpis. Fusce lectus orci, suscipit sit amet ornare sed, tempus nec lectus.
+            Nam ornare iaculis magna, porttitor facilisis dolor ultrices sit amet. Donec neque tellus, faucibus vitae
+            tincidunt quis, tempor at orci. Pellentesque quam est, varius sit amet ullamcorper id, interdum in nisl.
+            Morbi congue viverra tristique. Maecenas at dolor ut velit mollis mollis quis eget dolor. Sed lobortis
+            semper orci, eu elementum metus congue nec. Integer cursus, tellus fringilla semper dapibus, augue
+            turpis mollis mi, et auctor elit dui vitae lectus. Nunc vel nunc sed tellus gravida varius eget nec neque.
+            Donec pulvinar purus quis ligula feugiat placerat. Aliquam aliquam, quam vitae porta egestas, ante sem
+            aliquet nibh, accumsan posuere nulla est et sem. Ut cursus massa eu lacus ultricies ut faucibus ante
+            facilisis. Mauris luctus pellentesque enim, non malesuada orci ornare in. Donec dapibus ornare ligula
+            cursus hendrerit. Mauris lorem tortor, mattis at tincidunt sed, scelerisque ac nulla. Maecenas nec est
+            commodo nunc bibendum elementum et eu arcu.
+        </p>
+
+        <p>Fusce sed nunc mollis leo condimentum ultrices. Ut vel sodales elit. Aliquam feugiat accumsan justo, sed hendrerit mi mollis eu. Mauris risus orci, posuere at vehicula a, vulputate a libero. Nullam vehicula velit in diam aliquam molestie. Proin ac erat tellus, at condimentum est. Integer lacinia risus in tortor sollicitudin rhoncus. Nulla a felis tellus, in faucibus mi. Fusce eget libero turpis. Aenean posuere, velit dictum consequat cursus, diam urna suscipit massa, et aliquet ligula lectus et lectus. Ut viverra elementum rutrum. Etiam vehicula posuere nisi, vel sollicitudin ligula pulvinar gravida.</p>
+
+        <p>Praesent lacinia odio et mi rutrum in tincidunt leo pellentesque. Duis hendrerit risus vitae diam ullamcorper dignissim. Vivamus porttitor risus vel ligula auctor in adipiscing est facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut nec sapien lacus. Donec odio lorem, auctor quis varius a, mollis in ante. Sed gravida blandit augue, vitae convallis dui pellentesque non. Etiam eu ligula id enim commodo condimentum sed sit amet ipsum. Integer laoreet placerat velit, at aliquet tortor semper sed. Suspendisse tempor erat nec mi euismod convallis. Pellentesque sit amet vulputate turpis. Praesent ultrices rutrum justo, in imperdiet justo viverra id. Praesent facilisis, velit sit amet vehicula elementum, lectus felis mattis tortor, id condimentum urna ligula vitae velit.</p>
+
+        <p>Mauris augue elit, ultrices sit amet auctor ac, tincidunt vel lacus. Etiam eu eros nisi. Vestibulum orci nisi, consectetur et feugiat eget, egestas dictum tortor. Etiam porta lacus vel neque volutpat auctor. Donec laoreet, ante vel mattis egestas, diam nibh aliquet urna, sed sagittis sem nisi dapibus ligula. Vestibulum nibh nulla, euismod quis fringilla et, vehicula nec quam. Nulla at feugiat elit. Duis lobortis lacus ac diam laoreet sit amet interdum mi sollicitudin. Vivamus luctus velit nec ante vehicula faucibus. Etiam tincidunt malesuada massa quis venenatis. Donec sit amet lacus lectus. Nulla eget mi non est volutpat malesuada nec eu urna. Praesent sit amet dignissim justo. Vestibulum ornare, enim nec facilisis hendrerit, eros lacus iaculis lorem, at placerat sem elit vel lectus. Phasellus nunc neque, lobortis eu pellentesque ac, consectetur at tortor.</p>
+
+        <p>Nullam ullamcorper erat vitae velit luctus ultrices aliquam velit laoreet. Fusce eget malesuada mi. Sed eleifend, eros ac ultrices ultrices, libero sapien porttitor lectus, sed condimentum sem turpis nec risus. Etiam vulputate tellus eu eros elementum et aliquet ipsum fringilla. Duis vestibulum quam vel libero dictum sit amet tristique neque auctor. Pellentesque tellus dui, tempus at dapibus sed, mollis scelerisque lectus. In sit amet lorem turpis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nullam nec iaculis purus. Proin sagittis massa vel risus tincidunt sodales. Nullam tempor varius mi in tristique. Aenean commodo purus nec erat dictum a rhoncus tellus vulputate. Etiam pellentesque aliquam sem et scelerisque. Vestibulum varius tincidunt pulvinar.</p>
+    </div>
+
+    <div id="status-bar"></div>
+
+</body>
+</html>

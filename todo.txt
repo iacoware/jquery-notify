@@ -1,0 +1,14 @@
+- give the demos a nice layout
+- publish the demo on my site
+
+script:
+- Add different type of messages (info, warning, error). It would just attach a different css class
+- Test it on different browsers
+- Investigate the css fixed support across browser
+- Add option to use jquery ui css framework
+- Humanized style is somewhat wacky
+- Think about a notification of type 'error message' in place. Think about a delete button which got an error.
+  Where would you display it?
+- Add default prefix for css class
+- Work on themes (rounded corners)
+- Add an optional title
