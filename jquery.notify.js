@@ -35,10 +35,8 @@ $.notify('tr', 'timed', 'Element removed')
 
         var opts = $.extend({}, defaults, options);
         var container = getContainer();
-
-        var obj = Object.create(notification);
-        obj.init(options, content);
-        container.push(obj);
+        var notification = notificationFactory(opts, content);
+        container.push(notification);
     };
     factory.containers = {};
     factory.positions = ['tl', 'tc', 'tr', 'ml', 'mc', 'mr', 'bl', 'bc', 'br'];
@@ -134,73 +132,67 @@ $.notify('tr', 'timed', 'Element removed')
         };
     };
 
-    var notification = {
-        init: function(options, content) {
-            this.opts = $.extend({}, defaults, options);
-            this.element = this.createElement(content);
-        },
-
-        createElement: function(text) {
-            var self = this
-              , opts = this.opts
-              , elem = $('<div class="nf-notification nf-'+opts.type+'"></div>').html(text);
+    var notificationFactory = function(opts, content) {
+        var createElement = function(content) {
+            var elem = $('<div class="nf-notification nf-'+opts.type+'"></div>').html(content);
 
             if (opts.type === 'sticky') {
                 $('<div/>', {
                     className: 'nf-close-cmd'
                   , html: '[x]'
-                  , click: function() { self.expire(); }
+                  , click: function() { expire(); }
                 })
                 .appendTo(elem);
             }
 
             return elem;
-        },
+        }
 
-        show: function() {
-            var self = this
-              , opts = this.opts;
-
+        var show = function() {
             return $.Deferred(function (dfd) {
-                self.element.slideToggle(400, dfd.resolve);
-                //self.element.fadeToggle(400, dfd.resolve);
+                element.slideToggle(400, dfd.resolve);
+                //element.fadeToggle(400, dfd.resolve);
             })
             .promise()
             .then(function() {
                 if (opts.type === 'timed') {
-                    setTimeout(function() { self.expire(); }, opts.timeout);
+                    setTimeout(function() { expire(); }, opts.timeout);
                 }
 
                 if (opts.type === 'human') {
                     setTimeout(function() {
                         $(window)
-                            .bind('mousemove.notify', $.proxy(self, 'expire'))
-                            .bind('click.notify', $.proxy(self, 'expire'))
-                            .bind('keypress.notify', $.proxy(self, 'expire'))
+                            .bind('mousemove.notify', expire)
+                            .bind('click.notify', expire)
+                            .bind('keypress.notify', expire)
                     }, 700);
-                }   
+                }
             });
-        },
-
-        hide: function() {
-            var self = this
-              , opts = this.opts;
-
-            return $.Deferred(function(dfd) {
-                //self.element.fadeOut(1000, function() { dfd.resolve(); });
-                self.element.fadeTo(1000, 0, 'swing', function() { dfd.resolve(); });
-            });
-        },
-
-        expire: function() {
-            var self = this;
-            $(window)
-                    .unbind('mousemove.notify', self.expire)
-                    .unbind('click.notify', self.expire)
-                    .unbind('keypress.notify', self.expire)
-
-            $(self).trigger('expired.notify');
         }
-    };
+
+        var hide = function() {
+            return $.Deferred(function(dfd) {
+                //element.fadeOut(1000, function() { dfd.resolve(); });
+                element.fadeTo(1000, 0, 'swing', function() { dfd.resolve(); });
+            });
+        }
+
+        var expire = function() {
+            $(window)
+                    .unbind('mousemove.notify', expire)
+                    .unbind('click.notify', expire)
+                    .unbind('keypress.notify', expire)
+
+            $(instance).trigger('expired.notify');
+        }
+
+        var element = createElement(content);
+        var instance = {};
+
+        instance.show = show;
+        instance.hide = hide;
+        instance.element = element;
+        return instance;
+    }
     
 })(jQuery);
