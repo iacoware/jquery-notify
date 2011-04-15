@@ -46,6 +46,7 @@ $.notify('tr', 'timed', 'Element removed')
 
     var containerFactory = function(opts) {
         var notificationsCount = 0;
+        var externalContainer = $.inArray(opts.position, factory.positions) === -1;
         var elem = createElement(opts.position);
         if (elem.size() === 0) {
             throw 'There\s an error. The css selector "'+opts.position+'" ' +
@@ -84,7 +85,7 @@ $.notify('tr', 'timed', 'Element removed')
 
                 remove(notification).then(function() {
                     next();
-                    if (notificationsCount === 0) {
+                    if (notificationsCount === 0 && !externalContainer) {
                         destroy();
                     }
                 });
@@ -105,7 +106,7 @@ $.notify('tr', 'timed', 'Element removed')
         }
 
         function createElement(position) {
-            if ($.inArray(position, factory.positions) === -1) return $(position);
+            if (externalContainer) return $(position);
 
             var element =  $('<div class="nf-container"/>').css({
                 position: 'fixed'
