@@ -45,6 +45,7 @@ $.notify('tr', 'timed', 'Element removed')
     $.notify = factory;
 
     var containerFactory = function(opts) {
+        var notificationsCount = 0;
         var elem = createElement(opts.position);
         if (elem.size() === 0) {
             throw 'There\s an error. The css selector "'+opts.position+'" ' +
@@ -71,6 +72,7 @@ $.notify('tr', 'timed', 'Element removed')
 
                 var appendMethod = opts.vPos() == 'b'? 'prepend' : 'append';
                 elem[appendMethod](notification.element);
+                notificationsCount++;
 
                 notification.show().then(dfd.resolve);
             }).promise();
@@ -82,7 +84,7 @@ $.notify('tr', 'timed', 'Element removed')
 
                 remove(notification).then(function() {
                     next();
-                    if (elem.queue().length === 1) {
+                    if (notificationsCount === 0) {
                         destroy();
                     }
                 });
@@ -95,6 +97,7 @@ $.notify('tr', 'timed', 'Element removed')
                 notification.hide().then(function() {
                     notification.element.delay(200).slideUp(200, function() {
                         notification.element.remove();
+                        notificationsCount--;
                         dfd.resolve();
                     });
                 });
