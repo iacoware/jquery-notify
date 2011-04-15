@@ -12,10 +12,6 @@ examples:
 $.notify('.notification-bar', 'sticky', 'We have new coupons available to you. Be sure to check it out (insert a link)')
 $.notify('', 'Oops, there's an error below. Please correct it and try again')
 $.notify('tr', 'timed', 'Element removed')
-
-
-ALICE
-
  */
 
 (function($) {
@@ -38,6 +34,7 @@ ALICE
     };
     factory.containers = {};
     factory.positions = ['tl', 'tc', 'tr', 'ml', 'mc', 'mr', 'bl', 'bc', 'br'];
+    $.notify = factory;
 
     var containerFactory = function(opts) {
         var elem = createElement(opts.position);
@@ -78,9 +75,15 @@ ALICE
 
         function remove(notification) {
             return $.Deferred(function(dfd) {
+
                 notification.hide().then(function() {
-                    notification.element.remove();
-                    dfd.resolve();
+                    //notification.element.remove();
+                    //dfd.resolve();
+                    
+                    notification.element.delay(200).slideUp(200, function() {
+                        notification.element.remove();
+                        dfd.resolve();
+                    });
                 });
             }).promise();
         }
@@ -149,7 +152,17 @@ ALICE
               , opts = this.opts;
 
             return $.Deferred(function (dfd) {
-                self.element.show(400, dfd.resolve);
+                self.element.slideToggle(400, dfd.resolve);
+                //self.element.fadeToggle(400, dfd.resolve);
+
+                /*self.element
+                        .show()
+                        .css({
+                            left: 500
+                        })
+                        .animate({
+                            left: 0
+                        }, 1000, 'swing', dfd.resolve);*/
             })
             .promise()
             .then(function() {
@@ -173,7 +186,8 @@ ALICE
               , opts = this.opts;
 
             return $.Deferred(function(dfd) {
-                self.element.fadeOut(1000, function() { dfd.resolve(); });
+                //self.element.fadeOut(1000, function() { dfd.resolve(); });
+                self.element.fadeTo(1000, 0, 'swing', function() { dfd.resolve(); });
             });
         },
 
@@ -185,9 +199,8 @@ ALICE
                     .unbind('keypress.notify', self.removeFromContainer)
 
             self.container.pop(this);
+            //$(this).trigger('expired.notify');
         }
     };
-
-    $.notify = factory;
     
 })(jQuery);
