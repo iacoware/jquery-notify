@@ -28,12 +28,22 @@ $.notify('tr', 'timed', 'Element removed')
     };
 
     var factory = function(options, content) {
+        function getContainer() {
+            factory.containers[opts.position] = factory.containers[opts.position] || containerFactory(opts);
+            return factory.containers[opts.position];
+        }
+
+        var opts = $.extend({}, defaults, options);
+        var container = getContainer();
+
         var obj = Object.create(notification);
         obj.init(options, content);
-        return obj;
+        container.push(obj);
     };
     factory.containers = {};
     factory.positions = ['tl', 'tc', 'tr', 'ml', 'mc', 'mr', 'bl', 'bc', 'br'];
+
+    //export as a jQuery function
     $.notify = factory;
 
     var containerFactory = function(opts) {
@@ -45,12 +55,16 @@ $.notify('tr', 'timed', 'Element removed')
         }
 
         function push(notification) {
+            var self = this;
+
             elem.queue(function(next) {
-                var self = this;
-                
+                $(notification).bind('expired.notify', function() {
+                    $(notification).unbind('expired.notify');
+                    self.pop(notification);
+                });
                 add(notification).then(next)
             });
-            elem.delay(700);
+            elem.delay(200);
         }
 
         function add(notification) {
@@ -118,16 +132,6 @@ $.notify('tr', 'timed', 'Element removed')
         init: function(options, content) {
             this.opts = $.extend({}, defaults, options);
             this.element = this.createElement(content);
-            this.container = this.getContainer();
-            this.container.push(this);
-        },
-
-        getContainer: function() {
-            factory.containers[this.opts.position] =
-                    factory.containers[this.opts.position] ||
-                    containerFactory(this.opts);
-
-            return factory.containers[this.opts.position];
         },
 
         createElement: function(text) {
@@ -139,7 +143,7 @@ $.notify('tr', 'timed', 'Element removed')
                 $('<div/>', {
                     className: 'nf-close-cmd'
                   , html: '[x]'
-                  , click: function() { self.removeFromContainer(); }
+                  , click: function() { self.expire(); }
                 })
                 .appendTo(elem);
             }
@@ -154,28 +158,19 @@ $.notify('tr', 'timed', 'Element removed')
             return $.Deferred(function (dfd) {
                 self.element.slideToggle(400, dfd.resolve);
                 //self.element.fadeToggle(400, dfd.resolve);
-
-                /*self.element
-                        .show()
-                        .css({
-                            left: 500
-                        })
-                        .animate({
-                            left: 0
-                        }, 1000, 'swing', dfd.resolve);*/
             })
             .promise()
             .then(function() {
                 if (opts.type === 'timed') {
-                    setTimeout(function() { self.removeFromContainer(); }, opts.timeout);
+                    setTimeout(function() { self.expire(); }, opts.timeout);
                 }
 
                 if (opts.type === 'human') {
                     setTimeout(function() {
                         $(window)
-                            .bind('mousemove.notify', $.proxy(self, 'removeFromContainer'))
-                            .bind('click.notify', $.proxy(self, 'removeFromContainer'))
-                            .bind('keypress.notify', $.proxy(self, 'removeFromContainer'))
+                            .bind('mousemove.notify', $.proxy(self, 'expire'))
+                            .bind('click.notify', $.proxy(self, 'expire'))
+                            .bind('keypress.notify', $.proxy(self, 'expire'))
                     }, 700);
                 }   
             });
@@ -191,15 +186,14 @@ $.notify('tr', 'timed', 'Element removed')
             });
         },
 
-        removeFromContainer: function() {
+        expire: function() {
             var self = this;
             $(window)
-                    .unbind('mousemove.notify', self.removeFromContainer)
-                    .unbind('click.notify', self.removeFromContainer)
-                    .unbind('keypress.notify', self.removeFromContainer)
+                    .unbind('mousemove.notify', self.expire)
+                    .unbind('click.notify', self.expire)
+                    .unbind('keypress.notify', self.expire)
 
-            self.container.pop(this);
-            //$(this).trigger('expired.notify');
+            $(self).trigger('expired.notify');
         }
     };
     
