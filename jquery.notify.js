@@ -82,18 +82,19 @@ $.notify('tr', 'timed', 'Element removed')
             elem.queue(function(next) {
                 var self = this;
 
-                remove(notification).then(next)
+                remove(notification).then(function() {
+                    next();
+                    if (elem.queue().length === 1) {
+                        destroy();
+                    }
+                });
             });
             elem.delay(700);
         }
 
         function remove(notification) {
             return $.Deferred(function(dfd) {
-
                 notification.hide().then(function() {
-                    //notification.element.remove();
-                    //dfd.resolve();
-                    
                     notification.element.delay(200).slideUp(200, function() {
                         notification.element.remove();
                         dfd.resolve();
@@ -120,6 +121,11 @@ $.notify('tr', 'timed', 'Element removed')
             if (hpos === 'r') element.css('right', '0');
 
             return (element.appendTo(document.body), element);
+        }
+
+        function destroy() {
+            factory.containers[opts.position] = null;
+            elem.remove();
         }
 
         return {
