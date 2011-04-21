@@ -1,35 +1,74 @@
 /**** structure ****/
 .nf-container {
     margin: 10px;
-    /*z-index: -1;*/
 }
 
 .nf-notification {
     position: relative;
     z-index: 99;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    -webkit-box-shadow: 2px 2px 4px #333;
-    -moz-box-shadow: 2px 2px 4px #333;
-    box-shadow: 2px 2px 4px #333;
 }
 
 .nf-close-cmd {
     position: absolute;
     top: 0;
-    right: 0;
+    right: 3px;
+    font-size: 90%;
     cursor: pointer;
 }
 
 /**** appearance ****/
 .nf-notification {
     font-family: 'Arial';
-    font-size: 12px;
+    font-size: 13px;
     margin: 5px 0;
-    padding: 8px;
+    padding: 6px 8px;
     background-color: #2a2626;
     border: solid 1px #000;
     color: #f6f6f6;
+    border-radius: 5px;-webkit-border-radius: 5px;-moz-border-radius: 5px;
+}
+
+.nf-standard {
+    box-shadow: 2px 2px 4px #333;-webkit-box-shadow: 2px 2px 4px #333;-moz-box-shadow: 2px 2px 4px #333;
+}
+
+.nf-gmail {
+    font-size: 13px;
+    padding: 2px 7px;
+    background-color: #FFF1A8;
+    border: solid 1px #d4c472;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+}
+
+.nf-info {
+    font-size: 13px;
+    padding: 2px 7px;
+    background-color: #6FB7DF;
+    border: solid 1px #5790AF;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+}
+
+.nf-error {
+    font-size: 13px;
+    padding: 2px 7px;
+    background-color: #DF6F6F;
+    border: solid 1px #AF5757;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+}
+
+.nf-success {
+    font-size: 13px;
+    padding: 2px 7px;
+    background-color: #7DDF8A;
+    border: solid 1px #62AF6D;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
 }
 

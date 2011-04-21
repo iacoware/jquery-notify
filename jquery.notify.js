@@ -7,13 +7,6 @@
  * Dependencies: jquery 1.5
  */
 
-/*
-examples:
-$.notify('.notification-bar', 'sticky', 'We have new coupons available to you. Be sure to check it out (insert a link)')
-$.notify('', 'Oops, there's an error below. Please correct it and try again')
-$.notify('tr', 'timed', 'Element removed')
- */
-
 (function($) {
 
     var defaults = {
@@ -21,8 +14,9 @@ $.notify('tr', 'timed', 'Element removed')
       , width: 300
       , containerHeight: 200 //it's only used when you want to center vertically
       , type: 'timed' //sticky, human
-      , timeout: '3000' //time (ms)
+      , timeout: '5000' //time (ms)
       , opacity: 0.8
+      , extraClass: 'nf-standard'
       , vPos: function() { return this.position.substring(0, 1); }
       , hPos: function() { return this.position.substring(1, 2); }
     };
@@ -35,7 +29,7 @@ $.notify('tr', 'timed', 'Element removed')
 
         var opts = $.extend({}, defaults, options);
         var container = getContainer();
-        var notification = notificationFactory(opts, content);
+        var notification = notificationFactory(opts, content || opts.content);
         container.push(notification);
     };
     factory.containers = {};
@@ -138,7 +132,7 @@ $.notify('tr', 'timed', 'Element removed')
 
     var notificationFactory = function(opts, content) {
         var createElement = function(content) {
-            var elem = $('<div class="nf-notification nf-'+opts.type+'"></div>').html(content);
+            var elem = $('<div class="nf-notification nf-'+opts.type+' '+opts.extraClass+'"></div>').html(content);
 
             if (opts.type === 'sticky') {
                 $('<div/>', {
