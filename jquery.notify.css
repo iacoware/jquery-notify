@@ -10,6 +10,9 @@
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 4px #333;
+    -moz-box-shadow: 2px 2px 4px #333;
+    box-shadow: 2px 2px 4px #333;
 }
 
 .nf-close-cmd {

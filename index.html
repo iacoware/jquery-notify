@@ -6,8 +6,8 @@
     <link href="jquery.notify.css" rel="stylesheet">
     <style type="text/css">
         body        { font-family: Arial; font-size: 13px; color: #333; }
-        .header     { width: 90%; }
-        .wrapper    { width: 80%; margin: 0 auto; }
+        .header     { width: 80%; margin: 0 20px; }
+        .wrapper    { width: 80%; margin: 0 20px; }
         #status-bar { position: fixed; bottom: 0; width: 90%; left: 5%; }
 
         form label  { font-weight:bold; font-size: 110%;}
@@ -15,6 +15,19 @@
         td          { padding: 0;}
 
         .row        { margin-bottom: 15px; }
+
+        #current-call   {
+            padding: 20px;
+            font-size: 20px;
+            position: absolute;
+            left: 700px;
+            top: 140px;
+            width: 530px;
+            -webkit-box-shadow: 2px 2px 4px #333;  -moz-box-shadow: 2px 2px 4px #333;  box-shadow: 2px 2px 4px #333;
+            -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;
+        }
+        #current-call .call-options  { position: relative; left: 50px; color: #3c993c; }
+        #current-call .call-content  { position: relative; left: 50px; color: #ff6600; }
     </style>
 
     <script src="lib/jquery-1.5.2.js" type="text/javascript"></script>
@@ -40,8 +53,10 @@
             $('#notification-form')
                 .change(function() {
                     var opts = getValues();
-                    var code = '$.notify({type: "'+opts.type+'", position: "'+opts.position+'"}, "'+opts.content+'")';
-                    $('#current-call').text(code)
+                    var optsText = '{ type: "'+opts.type+'", position: "'+opts.position+'" }, ';
+                    var content = '"'+opts.content+'"';
+                    $('#current-call .call-options').text(optsText);
+                    $('#current-call .call-content').text(content);
                 })
                 .submit(function(e, data) {
                     var opts = getValues();
@@ -51,7 +66,8 @@
                         position: opts.position
                     }, opts.content);
                     return false;
-                });
+                })
+                .trigger('change');
         });
 
     </script>
@@ -117,14 +133,19 @@
 
             <div class="row">
                 <label>Content</label> <br>
-                <textarea name="content" id="" cols="50" rows="5">Hi, nothing inportant, I just <em>want</em> to say <b>hello</b></textarea>
+                <textarea name="content" id="" cols="50" rows="5">Hi, nothing important, I just <em>want</em> to say <b>hello</b></textarea>
             </div>
 
             <button type="submit">Show notification</button>
         </div>
         </form>
 
-        <label id="current-call"></label>
+        <div id="current-call">
+            $.notify( <br>
+            <span class="call-options"></span> <br>
+            <span class="call-content"></span> <br>
+            )
+        </div>
 
         <div>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vitae est vitae lacus congue convallis.
