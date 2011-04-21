@@ -12,9 +12,9 @@
 
         form label  { font-weight:bold; font-size: 110%;}
         table       { border-collapse:collapse; }
-        td          { padding: 0;}
+        td, input, p, div   { padding: 0; margin: 0; }
 
-        .row        { margin-bottom: 15px; }
+        .row        { margin-bottom: 30px; }
 
         #current-call   {
             padding: 20px;
@@ -36,7 +36,9 @@
         function getValues() {
             var values = $('#notification-form').serializeArray();
             var type = $.grep(values, function(item, index) { return item.name == 'type'; })[0].value;
+            var timeout = $.grep(values, function(item, index) { return item.name == 'timeout'; })[0].value;
             var pos = $.grep(values, function(item, index) { return item.name == 'position'; })[0].value;
+            var style = $.grep(values, function(item, index) { return item.name == 'style'; })[0].value;
             var container = $.grep(values, function(item, index) { return item.name == 'container'; })[0].value;
             var vpos = $.grep(values, function(item, index) { return item.name == 'vpos'; })[0].value;
             var hpos = $.grep(values, function(item, index) { return item.name == 'hpos'; })[0].value;
@@ -44,7 +46,9 @@
 
             return {
                 type: type,
+                timeout: timeout,
                 position: pos == 1? vpos + hpos : container,
+                extraClass: style,
                 content: content
             };
         }
@@ -53,18 +57,14 @@
             $('#notification-form')
                 .change(function() {
                     var opts = getValues();
-                    var optsText = '{ type: "'+opts.type+'", position: "'+opts.position+'" }, ';
+                    var optsText = '{ type: "'+opts.type+'", position: "'+opts.position+'", extraClass: "'+opts.extraClass+'" }, ';
                     var content = '"'+opts.content+'"';
                     $('#current-call .call-options').text(optsText);
                     $('#current-call .call-content').text(content);
                 })
                 .submit(function(e, data) {
                     var opts = getValues();
-
-                    $.notify({
-                        type: opts.type,
-                        position: opts.position
-                    }, opts.content);
+                    $.notify(opts);
                     return false;
                 })
                 .trigger('change');
@@ -87,14 +87,27 @@
         <form id="notification-form">
         <div>
             <div class="row">
-                <label>Type</label> <br>
-                <input type="radio" name="type" value="timed" checked/> Timed
-                <input type="radio" name="type" value="sticky" /> Sticky
-                <input type="radio" name="type" value="human" /> Human
+                <table>
+                    <tr>
+                        <td style="width: 300px;">
+                            <label>Type</label> <br>
+                            <input type="radio" name="type" value="timed" checked/> Timed
+                            <input type="radio" name="type" value="sticky" /> Sticky
+                            <input type="radio" name="type" value="human" /> Human
+                        </td>
+
+                        <td>
+                            <label>Timeout</label> <br>
+                            <input type="text" name="timeout" value="5000"/>
+                        </td>
+                    </tr>
+                </table>
             </div>
 
+
+
             <div class="row">
-                <table cellspacing="0">
+                <table>
                     <tr>
                         <td style="width: 300px">
                             <input type="radio" name="position" value="1" checked/> <label>Positioned</label>
@@ -133,10 +146,22 @@
 
             <div class="row">
                 <label>Content</label> <br>
-                <textarea name="content" id="" cols="50" rows="5">Hi, nothing important, I just <em>want</em> to say <b>hello</b></textarea>
+                <textarea name="content" id="" cols="50" rows="5">Hi, nothing important, I'd just <em>say</em> <b>hello</b></textarea>
             </div>
 
-            <button type="submit">Show notification</button>
+            <div class="row">
+                <label>Style</label> <br>
+                <input type="radio" name="style" value="nf-standard" checked/> Standard
+                <input type="radio" name="style" value="nf-info" /> Information
+                <input type="radio" name="style" value="nf-success" /> Success
+                <input type="radio" name="style" value="nf-error" /> Error
+                <input type="radio" name="style" value="nf-gmail" /> Like GMail
+
+            </div>
+
+            <div class="row">
+                <button type="submit">Show notification</button>
+            </div>
         </div>
         </form>
 
