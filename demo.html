@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>jQuery Notify Demo</title>
+
+    <link href="jquery.notify.css" rel="stylesheet">
+    <style type="text/css">
+        body        { font-family: Arial; font-size: 13px; color: #333; }
+        .header     { width: 80%; margin: 0 20px; }
+        .wrapper    { width: 80%; margin: 0 20px; }
+        #status-bar { position: fixed; bottom: 0; width: 90%; left: 5%; }
+
+        form label  { font-weight:bold; font-size: 110%;}
+        table       { border-collapse:collapse; }
+        td, input, p, div   { padding: 0; margin: 0; }
+
+        .row        { margin-bottom: 30px; }
+
+        #current-call   {
+            padding: 20px;
+            font-size: 20px;
+            position: absolute;
+            left: 700px;
+            top: 140px;
+            width: 530px;
+            -webkit-box-shadow: 2px 2px 4px #333;  -moz-box-shadow: 2px 2px 4px #333;  box-shadow: 2px 2px 4px #333;
+            -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;
+        }
+        #current-call .call-options  { position: relative; left: 50px; color: #3c993c; }
+        #current-call .call-content  { position: relative; left: 50px; color: #ff6600; }
+    </style>
+
+    <script src="lib/jquery-1.5.2.js" type="text/javascript"></script>
+    <script src="jquery.notify.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function getValues() {
+            var values = $('#notification-form').serializeArray();
+            var type = $.grep(values, function(item, index) { return item.name == 'type'; })[0].value;
+            var timeout = $.grep(values, function(item, index) { return item.name == 'timeout'; })[0].value;
+            var pos = $.grep(values, function(item, index) { return item.name == 'position'; })[0].value;
+            var style = $.grep(values, function(item, index) { return item.name == 'style'; })[0].value;
+            var container = $.grep(values, function(item, index) { return item.name == 'container'; })[0].value;
+            var vpos = $.grep(values, function(item, index) { return item.name == 'vpos'; })[0].value;
+            var hpos = $.grep(values, function(item, index) { return item.name == 'hpos'; })[0].value;
+            var content = $.grep(values, function(item, index) { return item.name == 'content'; })[0].value;
+
+            return {
+                type: type,
+                timeout: timeout,
+                position: pos == 1? vpos + hpos : container,
+                extraClass: style,
+                content: content
+            };
+        }
+
+        $(function() {
+            $('#notification-form')
+                .change(function() {
+                    var opts = getValues();
+                    var optsText = '{ type: "'+opts.type+'", position: "'+opts.position+'", extraClass: "'+opts.extraClass+'" }, ';
+                    var content = '"'+opts.content+'"';
+                    $('#current-call .call-options').text(optsText);
+                    $('#current-call .call-content').text(content);
+                })
+                .submit(function(e, data) {
+                    var opts = getValues();
+                    $.notify(opts);
+                    return false;
+                })
+                .trigger('change');
+        });
+
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>jQuery Notify plugin. Flexibility at your fingertips</h1>
+    </div>
+
+    <div id="notification-bar"></div>
+
+    <div class="wrapper">
+        <div>
+            
+        </div>
+
+        <form id="notification-form">
+        <div>
+            <div class="row">
+                <table>
+                    <tr>
+                        <td style="width: 300px;">
+                            <label>Type</label> <br>
+                            <input type="radio" name="type" value="timed" checked/> Timed
+                            <input type="radio" name="type" value="sticky" /> Sticky
+                            <input type="radio" name="type" value="human" /> Human
+                        </td>
+
+                        <td>
+                            <label>Timeout</label> <br>
+                            <input type="text" name="timeout" value="5000"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+
+
+            <div class="row">
+                <table>
+                    <tr>
+                        <td style="width: 300px">
+                            <input type="radio" name="position" value="1" checked/> <label>Positioned</label>
+                        </td>
+                        <td>
+                            <input type="radio" name="position" value="2"/> <label>or use an existing element as a container</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div>
+                        Vertical
+                        <input type="radio" name="vpos" value="t" checked/> Top
+                        <input type="radio" name="vpos" value="m" /> Middle
+                        <input type="radio" name="vpos" value="b" /> Bottom
+                    </div>
+
+                    <div>
+                        Horizontal
+                        <input type="radio" name="hpos" value="l" /> Left
+                        <input type="radio" name="hpos" value="c" /> Center
+                        <input type="radio" name="hpos" value="r" checked /> Right
+                    </div>
+                        </td>
+
+                        <td>
+                            <div>
+                                <input type="radio" name="container" value="#notification-bar" checked/> #notification-bar
+                                <input type="radio" name="container" value="#status-bar" /> #status-bar
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <div class="row">
+                <label>Content</label> <br>
+                <textarea name="content" id="" cols="50" rows="5">Hi, nothing important, I'd just <em>say</em> <b>hello</b></textarea>
+            </div>
+
+            <div class="row">
+                <label>Style</label> <br>
+                <input type="radio" name="style" value="nf-standard" checked/> Standard
+                <input type="radio" name="style" value="nf-info" /> Information
+                <input type="radio" name="style" value="nf-success" /> Success
+                <input type="radio" name="style" value="nf-error" /> Error
+                <input type="radio" name="style" value="nf-gmail" /> Like GMail
+
+            </div>
+
+            <div class="row">
+                <button type="submit">Show notification</button>
+            </div>
+        </div>
+        </form>
+
+        <div id="current-call">
+            $.notify( <br>
+            <span class="call-options"></span> <br>
+            <span class="call-content"></span> <br>
+            )
+        </div>
+
+        <div>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vitae est vitae lacus congue convallis.
+                Praesent iaculis blandit sapien id aliquam. Sed euismod justo ac orci commodo at posuere lorem laoreet.
+                Sed sit amet volutpat turpis. Fusce lectus orci, suscipit sit amet ornare sed, tempus nec lectus.
+                Nam ornare iaculis magna, porttitor facilisis dolor ultrices sit amet. Donec neque tellus, faucibus vitae
+                tincidunt quis, tempor at orci. Pellentesque quam est, varius sit amet ullamcorper id, interdum in nisl.
+                Morbi congue viverra tristique. Maecenas at dolor ut velit mollis mollis quis eget dolor. Sed lobortis
+                semper orci, eu elementum metus congue nec. Integer cursus, tellus fringilla semper dapibus, augue
+                turpis mollis mi, et auctor elit dui vitae lectus. Nunc vel nunc sed tellus gravida varius eget nec neque.
+                Donec pulvinar purus quis ligula feugiat placerat. Aliquam aliquam, quam vitae porta egestas, ante sem
+                aliquet nibh, accumsan posuere nulla est et sem. Ut cursus massa eu lacus ultricies ut faucibus ante
+                facilisis. Mauris luctus pellentesque enim, non malesuada orci ornare in. Donec dapibus ornare ligula
+                cursus hendrerit. Mauris lorem tortor, mattis at tincidunt sed, scelerisque ac nulla. Maecenas nec est
+                commodo nunc bibendum elementum et eu arcu.</p>
+
+            <p>Fusce sed nunc mollis leo condimentum ultrices. Ut vel sodales elit. Aliquam feugiat accumsan justo, sed
+                hendrerit mi mollis eu. Mauris risus orci, posuere at vehicula a, vulputate a libero. Nullam vehicula
+                velit in diam aliquam molestie. Proin ac erat tellus, at condimentum est. Integer lacinia risus in
+                tortor sollicitudin rhoncus. Nulla a felis tellus, in faucibus mi. Fusce eget libero turpis. Aenean
+                posuere, velit dictum consequat cursus, diam urna suscipit massa, et aliquet ligula lectus et lectus. Ut
+                viverra elementum rutrum. Etiam vehicula posuere nisi, vel sollicitudin ligula pulvinar gravida.</p>
+        </div>
+    </div>
+
+    <div id="status-bar"></div>
+
+</body>
+</html>
