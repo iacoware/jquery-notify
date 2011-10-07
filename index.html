@@ -73,7 +73,7 @@
                 })
                 .submit(function(e, data) {
                     var opts = getValues();
-                    $.notify(opts);
+                    $.notify(opts.content, opts);
                     return false;
                 })
                 .trigger('change');
