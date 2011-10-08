@@ -16,12 +16,13 @@
       , type: 'timed' //sticky, human
       , timeout: '5000' //time (ms)
       , opacity: 0.8
+      , stickyTemplate: '[x]'
       , extraClass: 'nf-standard'
       , vPos: function() { return this.position.substring(0, 1); }
       , hPos: function() { return this.position.substring(1, 2); }
     };
 
-    var factory = function(options, content) {
+    var factory = function(content, options) {
         function getContainer() {
             factory.containers[opts.position] = factory.containers[opts.position] || containerFactory(opts);
             return factory.containers[opts.position];
@@ -29,8 +30,9 @@
 
         var opts = $.extend({}, defaults, options);
         var container = getContainer();
-        var notification = notificationFactory(opts, content || opts.content);
+        var notification = notificationFactory(content || opts.content, opts);
         container.push(notification);
+    	return notification;
     };
     factory.containers = {};
     factory.positions = ['tl', 'tc', 'tr', 'ml', 'mc', 'mr', 'bl', 'bc', 'br'];
@@ -130,21 +132,23 @@
         };
     };
 
-    var notificationFactory = function(opts, content) {
+    var notificationFactory = function(content, opts) {
         var createElement = function(content) {
             var elem = $('<div class="nf-notification nf-'+opts.type+' '+opts.extraClass+'"></div>').html(content);
 
             if (opts.type === 'sticky') {
-                $('<div/>', {
-                    className: 'nf-close-cmd'
-                  , html: '[x]'
-                  , click: function() { expire(); }
-                })
-                .appendTo(elem);
+                if (opts.stickyTemplate) {
+                	$('<div/>', {
+						'class': 'nf-close-cmd'
+					  , html: opts.stickyTemplate
+					}).appendTo(elem);
+                }
+            	
+            	elem.click(function() { expire(); });
             }
 
             return elem;
-        }
+        };
 
         var show = function() {
             return $.Deferred(function (dfd) {
@@ -162,35 +166,36 @@
                         $(window)
                             .bind('mousemove.notify', expire)
                             .bind('click.notify', expire)
-                            .bind('keypress.notify', expire)
+                            .bind('keypress.notify', expire);
                     }, 700);
                 }
             });
-        }
+        };
 
         var hide = function() {
             return $.Deferred(function(dfd) {
                 //element.fadeOut(1000, function() { dfd.resolve(); });
                 element.fadeTo(1000, 0, 'swing', function() { dfd.resolve(); });
             });
-        }
+        };
 
         var expire = function() {
-            $(window)
-                    .unbind('mousemove.notify', expire)
-                    .unbind('click.notify', expire)
-                    .unbind('keypress.notify', expire)
+        	$(window)
+	        	.unbind('mousemove.notify', expire)
+	        	.unbind('click.notify', expire)
+	        	.unbind('keypress.notify', expire);
 
             $(instance).trigger('expired.notify');
-        }
+        };
 
         var element = createElement(content);
         var instance = {};
 
-        instance.show = show;
-        instance.hide = hide;
+    	instance.show = show;
+    	instance.hide = hide;
+    	instance.close = expire;
         instance.element = element;
         return instance;
-    }
+    };
     
 })(jQuery);
